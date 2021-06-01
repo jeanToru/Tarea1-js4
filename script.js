@@ -1,69 +1,44 @@
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
-
-
-// Variable cuadrado
 let xPosition = 0;
 let yPosition = 0;
 let velocityX = getRandomArbitrary(-3, 3);
 let velocityY = getRandomArbitrary(-3, 3);
-// Variable circulo
-let xCirculo = 275;
-let yCirculo = 275;
+let xCircle = 275;
+let yCircle = 275;
 let velocityXC = getRandomArbitrary(-5, 5);
 let velocityYC = getRandomArbitrary(-5, 5);
 
+
+
+
 function draw() {
+    const squareBlue = new square(xPosition, yPosition, velocityX, velocityY);
+    const circleRed = new circle(xCircle, yCircle, velocityXC, velocityYC);
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = 'blue';
-    ctx.fillRect(xPosition, yPosition, 150, 150);
-    ctx.beginPath();
-    ctx.fillStyle = 'red';
-    ctx.arc(xCirculo, yCirculo, 100, 0, 2 * Math.PI);
-    ctx.fill();
+    squareBlue.drawSquare();
+    circleRed.drawCircle();
 
-    // Cuadrado Rebota rigth
-    if (xPosition + 150 >= canvas.width) {
-        velocityX = -velocityX;
-    }
-    // Cuadrado Rebota down
-    if (yPosition + 150 >= canvas.height) {
-        velocityY = -velocityY;
-    }
-
-    // Cuadrado Rebota left
-    if (xPosition < 0) {
+    if(xPosition + velocityX > canvas.width-150 || xPosition < 0) {
         velocityX = -velocityX;
     }
 
-    // Cuadrado Rebota up
-    if (yPosition < 0) {
+    if(yPosition + velocityX > canvas.height-150 || yPosition < 0) {
         velocityY = -velocityY;
     }
 
-    // Circulo Rebota rigth
-    if (xCirculo + 100 >= canvas.width) {
-        velocityXC = -velocityXC;
-    }
-    // Circulo Rebota down
-    if (yCirculo + 100 >= canvas.height) {
-        velocityYC = -velocityYC;
-    }
-
-    // Circulo Rebota left
-    if (xCirculo - 100 < 0) {
+    if(xCircle + velocityXC > canvas.width-100 || xCircle + velocityXC < 100) {
         velocityXC = -velocityXC;
     }
 
-    // Circulo Rebota up
-    if (yCirculo - 100 < 0) {
+    if(yCircle + velocityYC > canvas.height-100 || yCircle + velocityYC < 100) {
         velocityYC = -velocityYC;
     }
 
     xPosition += velocityX;
     yPosition += velocityY;
-    xCirculo += velocityXC;
-    yCirculo += velocityYC;
+    xCircle += velocityXC;
+    yCircle += velocityYC;
 
     window.requestAnimationFrame(draw);
 }
@@ -72,4 +47,32 @@ window.requestAnimationFrame(draw);
 
 function getRandomArbitrary(min, max) {
     return Math.random() * (max - min) + min;
+}
+
+class square {
+    constructor(xPosition, yPosition, velocityX, velocityY) {
+        this.xPosition = xPosition;
+        this.yPosition = yPosition;
+        this.velocityX = velocityX;
+        this.velocityY = velocityY;
+    }
+    drawSquare() {
+        ctx.fillStyle = 'blue';
+        ctx.fillRect(xPosition, yPosition, 150, 150);
+    }
+}
+
+class circle {
+    constructor(xCircle, yCircle, velocityXC, velocityYC) {
+        this.xCircle = xCircle;
+        this.yCircle = yCircle;
+        this.velocityXC = velocityXC;
+        this.velocityYC = velocityYC;
+    }
+    drawCircle() {
+        ctx.beginPath();
+        ctx.fillStyle = 'red';
+        ctx.arc(xCircle, yCircle, 100, 0, 2 * Math.PI);
+        ctx.fill();
+    }
 }
